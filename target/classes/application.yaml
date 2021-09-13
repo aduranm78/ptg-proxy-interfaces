@@ -1,7 +1,7 @@
 
 camel:
   springboot:
-    name: i-disa-proxy
+    name: i-ptg-proxy
     main-run-controller: true
 
 server:

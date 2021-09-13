@@ -6,6 +6,7 @@ package com.redhat;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
+import org.apache.camel.Processor;
 
 @Component
 public class Routes extends RouteBuilder {
