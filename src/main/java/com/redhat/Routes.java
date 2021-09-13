@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.camel.Processor;
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import java.util.Map;
 
 @Component
 public class Routes extends RouteBuilder {
@@ -20,9 +22,7 @@ public class Routes extends RouteBuilder {
       .port("8080")
       .bindingMode(RestBindingMode.auto);
     
-    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
-    String script = "582";
-    String deploy = "1";
+    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=582&deploy=1";
 
     rest()
       .path("/").consumes("application/json").produces("application/json")
@@ -31,10 +31,10 @@ public class Routes extends RouteBuilder {
           .to("direct:put-customer")
         .post("/order")
 //          .type(Customer.class).outType(CustomerSuccess.class)
-          .to("direct:post-customer");
+          .to("direct:post-customer")
         .get("/order")
 //          .type(Customer.class).outType(CustomerSuccess.class)
-          .to("direct:post-customer");
+          .to("direct:get-customer");
     
     from("direct:post-customer")
       .setHeader("HTTP_METHOD", constant("POST"))
@@ -47,9 +47,10 @@ public class Routes extends RouteBuilder {
       .to("direct:request");
 
     from("direct:request")
+      .removeHeader(Exchange.HTTP_URI)
       .setHeader("backend", simple("{{redhat.backend}}"))
-      .setHeader(Exchange.HTTP_QUERY, expression("script=${script}"))
-      .setHeader(Exchange.HTTP_QUERY, expression("deploy=${deploy}"))
+      .setHeader("script", simple("582"))
+      .setHeader("deploy", simple("1"))
       .process(new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -57,9 +58,22 @@ public class Routes extends RouteBuilder {
             exchange.getMessage().setHeader("Authorization", authHeader);
         }
       })
-      .to("log:DEBUG?showBody=true&showHeaders=false")
-      .toD("http://${header.backend}?bridgeEndpoint=true&throwExceptionOnFailure=false")
-      .to("log:DEBUG?showBody=true&showHeaders=false");
+      .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+          Message exchangeIn = exchange.getIn();
+          Map<String, Object> headers = exchangeIn.getHeaders();
+          headers.put("accept", "*/*");
+          headers.put(Exchange.HTTP_QUERY,  "bridgeEndpoint=true");
+          headers.put(Exchange.HTTP_QUERY,  "throwExceptionOnFailure=false");
+          headers.put(Exchange.HTTP_METHOD, "GET");
+          headers.put(Exchange.CONTENT_TYPE, "application/json");
+        }
+      })
+      .to("log:DEBUG?showBody=true&showHeaders=true")
+      //.toD("https://${header.backend}&bridgeEndpoint=true&throwExceptionOnFailure=false")
+      .toD("https://${header.backend}")
+      .to("log:DEBUG?showBody=true&showHeaders=true");
       
 //      .choice()
 //        .when(simple("${header.CamelHttpResponseCode} != 201 && ${header.CamelHttpResponseCode} != 202"))
