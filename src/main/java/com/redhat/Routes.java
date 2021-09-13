@@ -20,7 +20,9 @@ public class Routes extends RouteBuilder {
       .port("8080")
       .bindingMode(RestBindingMode.auto);
     
-    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=582&deploy=1";
+    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
+    String script = "582";
+    String deploy = "1";
 
     rest()
       .path("/").consumes("application/json").produces("application/json")
@@ -30,6 +32,9 @@ public class Routes extends RouteBuilder {
         .post("/order")
 //          .type(Customer.class).outType(CustomerSuccess.class)
           .to("direct:post-customer");
+        .get("/order")
+//          .type(Customer.class).outType(CustomerSuccess.class)
+          .to("direct:post-customer");
     
     from("direct:post-customer")
       .setHeader("HTTP_METHOD", constant("POST"))
@@ -37,9 +42,14 @@ public class Routes extends RouteBuilder {
     from("direct:put-customer")
       .setHeader("HTTP_METHOD", constant("PUT"))
       .to("direct:request");
+    from("direct:get-customer")
+      .setHeader("HTTP_METHOD", constant("GET"))
+      .to("direct:request");
 
     from("direct:request")
       .setHeader("backend", simple("{{redhat.backend}}"))
+      .setHeader(Exchange.HTTP_QUERY, expression("script=${script}"))
+      .setHeader(Exchange.HTTP_QUERY, expression("deploy=${deploy}"))
       .process(new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {

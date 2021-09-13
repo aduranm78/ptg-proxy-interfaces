@@ -6,7 +6,7 @@ items:
   kind: Service
   metadata:
     annotations:
-      fabric8.io/git-commit: 69c9851964371171f6511c4173f057e9542c01b9
+      fabric8.io/git-commit: ff40e3fabc3ebc91bda545f49ca482442b610637
       fabric8.io/iconUrl: img/icons/camel.svg
       fabric8.io/git-branch: main
     labels:
@@ -30,7 +30,7 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      fabric8.io/git-commit: 69c9851964371171f6511c4173f057e9542c01b9
+      fabric8.io/git-commit: ff40e3fabc3ebc91bda545f49ca482442b610637
       fabric8.io/iconUrl: img/icons/camel.svg
       fabric8.io/git-branch: main
       fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=i-ptg-test-order&var-version=0.1.0
@@ -51,7 +51,7 @@ items:
     template:
       metadata:
         annotations:
-          fabric8.io/git-commit: 69c9851964371171f6511c4173f057e9542c01b9
+          fabric8.io/git-commit: ff40e3fabc3ebc91bda545f49ca482442b610637
           fabric8.io/iconUrl: img/icons/camel.svg
           fabric8.io/git-branch: main
           fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=i-ptg-test-order&var-version=0.1.0
