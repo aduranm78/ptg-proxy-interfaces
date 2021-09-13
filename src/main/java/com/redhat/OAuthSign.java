@@ -1,4 +1,4 @@
-package com.example;
+package com.redhat;
 
 import java.io.IOException;
 import java.util.Set;
