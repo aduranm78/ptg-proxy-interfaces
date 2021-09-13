@@ -6,7 +6,9 @@ package com.redhat;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
+
 import org.apache.camel.Processor;
+import org.apache.camel.Exchange;
 
 @Component
 public class Routes extends RouteBuilder {
@@ -18,6 +20,8 @@ public class Routes extends RouteBuilder {
       .port("8080")
       .bindingMode(RestBindingMode.auto);
     
+    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=582&deploy=1";
+
     rest()
       .path("/").consumes("application/json").produces("application/json")
         .put("/order")
