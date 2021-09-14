@@ -3,9 +3,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    fabric8.io/git-commit: 38dbdeabc3dc0d88d051c001a6a4760da694cfb9
+    fabric8.io/git-commit: 288da920baedca3cb9ffd20e1f0c69201767e546
     fabric8.io/iconUrl: img/icons/camel.svg
-    fabric8.io/git-branch: main
+    fabric8.io/git-branch: get-lead
     fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=i-ptg-test-lead&var-version=0.1.0
   labels:
     app: i-ptg-test-lead
@@ -24,9 +24,9 @@ spec:
   template:
     metadata:
       annotations:
-        fabric8.io/git-commit: 38dbdeabc3dc0d88d051c001a6a4760da694cfb9
+        fabric8.io/git-commit: 288da920baedca3cb9ffd20e1f0c69201767e546
         fabric8.io/iconUrl: img/icons/camel.svg
-        fabric8.io/git-branch: main
+        fabric8.io/git-branch: get-lead
         fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=i-ptg-test-lead&var-version=0.1.0
       labels:
         app: i-ptg-test-lead
