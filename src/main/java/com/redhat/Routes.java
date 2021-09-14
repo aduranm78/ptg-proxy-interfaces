@@ -22,57 +22,52 @@ public class Routes extends RouteBuilder {
       .port("8080")
       .bindingMode(RestBindingMode.auto);
     
-    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=582&deploy=1";
+    String erpUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=580&deploy=2&bridgeEndpoint=true&throwExceptionOnFailure=false";
+    String NSUri = "https://5298967-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
+    String  method ="POST";
 
     rest()
       .path("/").consumes("application/json").produces("application/json")
-        .put("/order")
-//          .type(Customer.class).outType(CustomerSuccess.class)
+        .put("/get-lead")
+        //.type(Customer.class).outType(CustomerSuccess.class)
           .to("direct:put-customer")
-        .post("/order")
-//          .type(Customer.class).outType(CustomerSuccess.class)
+        .post("/get-lead")
+        //.type(Customer.class).outType(CustomerSuccess.class)
           .to("direct:post-customer")
-        .get("/order")
-//          .type(Customer.class).outType(CustomerSuccess.class)
+        .get("/get-lead")
+        //.type(Customer.class).outType(CustomerSuccess.class)
           .to("direct:get-customer");
     
     from("direct:post-customer")
       .setHeader("HTTP_METHOD", constant("POST"))
       .to("direct:request");
+      method="POST";
     from("direct:put-customer")
       .setHeader("HTTP_METHOD", constant("PUT"))
       .to("direct:request");
+      method="POST";
     from("direct:get-customer")
       .setHeader("HTTP_METHOD", constant("GET"))
       .to("direct:request");
+      method="GET";
 
     from("direct:request")
-      .removeHeader(Exchange.HTTP_URI)
+      /*.removeHeader(Exchange.HTTP_URI)
       .setHeader("backend", simple("{{redhat.backend}}"))
       .setHeader("script", simple("582"))
-      .setHeader("deploy", simple("1"))
+      .setHeader("deploy", simple("1"))*/
       .process(new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-          String authHeader = OAuthSign.getAuthHeader(erpUri);
-            exchange.getMessage().setHeader("Authorization", authHeader);
-        }
-      })
-      .process(new Processor() {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-          Message exchangeIn = exchange.getIn();
-          Map<String, Object> headers = exchangeIn.getHeaders();
-          headers.put("accept", "*/*");
-          headers.put(Exchange.HTTP_QUERY,  "bridgeEndpoint=true");
-          headers.put(Exchange.HTTP_QUERY,  "throwExceptionOnFailure=false");
-          headers.put(Exchange.HTTP_METHOD, "GET");
-          headers.put(Exchange.CONTENT_TYPE, "application/json");
+          String authHeader = OAuthSign.getAuthHeader(erpUri,"GET"); 
+          exchange.getMessage().setHeader("Authorization", authHeader);
+          exchange.getMessage().setHeader(Exchange.HTTP_QUERY, "script=580&deploy=2&bridgeEndpoint=true&throwExceptionOnFailure=false");
+    	    exchange.getMessage().setHeader(Exchange.HTTP_URI, NSUri);
         }
       })
       .to("log:DEBUG?showBody=true&showHeaders=true")
       //.toD("https://${header.backend}&bridgeEndpoint=true&throwExceptionOnFailure=false")
-      .toD("https://${header.backend}")
+      .toD("https://NSUri")
       .to("log:DEBUG?showBody=true&showHeaders=true");
       
 //      .choice()

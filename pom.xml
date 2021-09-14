@@ -4,7 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.redhat</groupId>
-  <artifactId>i-ptg-test-order</artifactId>
+  <artifactId>i-ptg-test-lead</artifactId>
   <version>0.1.0</version>
   <properties>
     <fuse-version>7.4.0.fuse-740036-redhat-00002</fuse-version>

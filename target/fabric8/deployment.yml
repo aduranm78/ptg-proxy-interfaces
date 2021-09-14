@@ -11,4 +11,4 @@ spec:
             - name: SPRING_APPLICATION_JSON
               value: '{"server":{"tomcat":{"max-threads":1}}}'
             - name: JAVA_APP_JAR
-              value: i-ptg-test-order-0.1.0.jar
+              value: i-ptg-test-lead-0.1.0.jar

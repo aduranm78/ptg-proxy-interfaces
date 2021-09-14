@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    fabric8.io/git-commit: 38dbdeabc3dc0d88d051c001a6a4760da694cfb9
+    fabric8.io/iconUrl: img/icons/camel.svg
+    fabric8.io/git-branch: main
+  labels:
+    expose: "true"
+    app: i-ptg-test-lead
+    provider: fabric8
+    version: 0.1.0
+    group: com.redhat
+  name: i-ptg-test-lead
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: i-ptg-test-lead
+    provider: fabric8
+    group: com.redhat
